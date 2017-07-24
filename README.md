@@ -1,1 +1,2 @@
-To use library copy our main.lua into you main.lua and run it will connected to the internet.
+To use library copy our main.lua into your main.lua and run it while connected to the internet.
+It is will automatically load files into hidden .system folder and will keep track of them throught .directory.lua

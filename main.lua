@@ -24,12 +24,12 @@ local loc_versions = f and f() or {}
 local net_versions = loadstring( gitfile(".directory.lua") )()
 if net_versions[".directory.lua"] == loc_versions[".directory.lua"] then return require ".system" end
 
-for f , v in pairs(net_versions) do
-	if loc_versions[f] >= v then
+for path , v in pairs(net_versions) do
+	if (loc_versions[path] or 0) >= v then
 		local s = 1
 		for i = 1 , #path do
 			if path:sub(i,i) == "/" then
-				os.execute("mkdir "..dir:gusb(" ","\\ ").."/"..path:sub(s,i-1):gusb(" ","\\ ") )
+				os.execute("mkdir "..dir:gsub(" ","\\ ").."/"..path:sub(s,i-1):gsub(" ","\\ ") )
 				s = i + 1
 			end
 		end
