@@ -1,5 +1,5 @@
 return {
-	["main.lua"] = 1,
+	["main.lua"] = 2,
 	[".directory.lua"] = 0,
 	[".system/class.lua"] = 0,
 	[".system/init.lua"] = 0,
