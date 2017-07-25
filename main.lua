@@ -1,6 +1,6 @@
 local http = require("socket.http")
 local socket = require("socket")
-local dir = love.filesystem.getRealDirectory("")
+local dir = love.filesystem.getSource()
 
 http.TIMOUT = 10
 package.path = package.path..";"..dir.."/.system/require.lua"
@@ -25,7 +25,8 @@ local net_versions = loadstring( gitfile(".directory.lua") )()
 if net_versions[".directory.lua"] == loc_versions[".directory.lua"] then return require ".system" end
 
 for path , v in pairs(net_versions) do
-	if (loc_versions[path] or 0) >= v then
+	love.errhand(path)
+	if (loc_versions[path] or -1) < v then
 		local s = 1
 		for i = 1 , #path do
 			if path:sub(i,i) == "/" then
@@ -34,7 +35,7 @@ for path , v in pairs(net_versions) do
 			end
 		end
 		local file = io.open(dir.."/"..path , "w")
-		file:write( gitfile(path) )
+		file:write( gitfile( path ) )
 		file:close()
 	end
 end
