@@ -42,4 +42,10 @@ for path , v in pairs(net_versions) do
 	end
 end
 
+for path , v in pairs(loc_versions) do
+	if not net_versions[path] then
+		os.execute("rm "..dir:gsub(" ","\\ ").."/"..path:gsub(" ","\\ "))
+	end
+end
+
 return require ".system"

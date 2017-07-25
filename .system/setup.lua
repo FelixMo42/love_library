@@ -39,9 +39,4 @@ screen = {
 	end
 }
 
-systems = {
-	mouse = mouse,
-	screen = screen
-}
-
-return systems
+systems = {mouse = mouse,screen = screen}
