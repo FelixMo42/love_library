@@ -1,3 +1,5 @@
+ --systems
+
 mouse = {
 	x = love.mouse.getX(), y = love.mouse.getY(),
 	dx = 0, dy = 0, sx = 0, sy = 0, ex = 0, ey = 0,
@@ -40,3 +42,77 @@ screen = {
 }
 
 systems = {mouse = mouse,screen = screen}
+
+--load files
+
+tabs = {}
+
+for i , f in ipairs({"system","_system","classes","_classes"}) do
+	if filesystem:exist(f) then
+		if filesystem:exist(f.."/init.lua") then
+			require(f)
+		else
+			for i , file in pairs( filesystem:getDirectory(f,".lua") ) do
+				if not filesystem:isDirectory(f.."/"..file) then
+					require(f.."/"..file)
+				end
+			end
+		end
+	end
+end
+
+--tabs
+
+local function loadtab(dir,file)
+	file = file:gsub(".lua","")
+	_G[file] = {}
+	local tab = tab:new({name = file})
+	tabs[#tabs + 1] = tab
+	tabs[tab] = tab
+	tabs[file] = tab
+	tabs[ _G[file] ] = tab
+	require(dir.."/"..file)
+	tab:dofunc("load")
+end
+
+for i , f in ipairs({"tabs","_tabs"}) do
+	if filesystem:exist(f) then
+		if filesystem:exist(f.."/init.lua") then
+			require(f)
+		else
+			for i , file in pairs( filesystem:getDirectory(f,".lua") ) do
+				if not filesystem:isDirectory(f.."/"..file) then
+					file = file:gsub(".lua","")
+					_G[file] = {}
+					local tab = tab:new({name = file})
+					tabs[#tabs + 1] = tab
+					tabs[tab] = tab
+					tabs[file] = tab
+					tabs[ _G[file] ] = tab
+					require(f.."/"..file)
+					tab:dofunc("load")
+				end
+			end
+		end
+	end
+end
+
+if not filesystem:exist("tabs") and not filesystem:exist("_tabs") then
+	for i , file in pairs( filesystem:getDirectory("",".lua") ) do
+		if not filesystem:isDirectory(file) and file ~= "main.lua" or file ~= "conf.lua" then
+			file = file:gsub(".lua","")
+			_G[file] = {}
+			local tab = tab:new({name = file})
+			tabs[#tabs + 1] = tab
+			tabs[tab] = tab
+			tabs[file] = tab
+			tabs[ _G[file] ] = tab
+			require(file)
+			tab:dofunc("load")
+		end
+	end
+end
+
+if not tab.name then
+	tab = tabs.def or tabs.menu or tabs[1] or console
+end

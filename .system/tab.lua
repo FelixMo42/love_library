@@ -49,8 +49,4 @@ function tab:dofunc(f,...)
 	return unpack(ret)
 end
 
-tabs = {}
-
-package.preload["tab"] = function() return tab end
-
 return tab

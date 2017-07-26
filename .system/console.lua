@@ -1,0 +1,3 @@
+local console = {}
+
+return console

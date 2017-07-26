@@ -163,6 +163,11 @@ font = setmetatable( {} , {
 
 --love
 
+function love.fatalerror(e)
+	love.errhand(e)
+	love.event.quit()
+end
+
 function love.graphics.prints(t,x,y,w,h,xa,ya)
 	ya , t = ya or "center" , tostring(t)
 	if ya == "center" then

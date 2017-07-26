@@ -28,7 +28,7 @@ local function lovefunction(f)
 end
 
 for i , f in ipairs(_FUNCTIONS) do
-	_G[f] = lovefunction(f)
+	love[f] = lovefunction(f)
 end
 
 function love.open(t,...)

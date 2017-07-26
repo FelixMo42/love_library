@@ -1,11 +1,13 @@
 local inputs = {...}
-local dir = "/"..(...)
+local dir = love.filesystem.getSource().."/"..(...)
 
-f = loadfile(love.filesystem.getRealDirectory("")..dir)
-if f then return f(inputs) end
-f = loadfile(love.filesystem.getRealDirectory("")..dir..".lua")
-if f then return f(inputs) end
-f = loadfile(love.filesystem.getRealDirectory("")..dir.."/init.lua")
-if f then return f(inputs) end
+for i , ext in ipairs({"",".lua","/init.lua"}) do
+	f , e = loadfile(dir..ext)
+	if f then return f(inputs) end
+	if os.rename(dir..ext , dir..ext) and not os.rename(dir..ext.."/" , dir..ext.."/") then
+		love.errhand(e)
+		return e
+	end
+end
 
 love.errhand("could not find "..dir)
