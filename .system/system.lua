@@ -1,54 +1,21 @@
 --lua
 
-rawnext = next
-rawpairs = pairs
-
-function next(t,k)
-    local meta = rawgetmetatable(t)
-    local next = meta and meta.__next or rawnext
-    return next(t,k)
-end
-
-function pairs(t) return next, t, nil end
-
-rawsetmetatable = setmetatable
-rawgetmetatable = getmetatable
-
-function setmetatable(item,mt)
-	local meta = rawgetmetatable(item)
-    return (meta and meta.__setmetatable or rawsetmetatable)(item,mt)
-end
-
-function getmetatable(item)
-	local meta = rawgetmetatable(item)
-	if meta and meta.__getmetatable  then
-		return meta.__getmetatable(item)
+function addmetamethod(k,p)
+	p = p or "raw"
+	if not _G[p..k] then
+		_G[p..k] = _G[k]
 	end
-    return meta
-end
-
-defrawset = rawset
-defrawget = rawget
-
-function rawget(table,key)
-	local meta = rawgetmetatable(table)
-    return (meta and meta.__rawget or defrawget)(table,key)
-end
-
-function rawset(table,key,value)
-	local meta = rawgetmetatable(table)
-    return (meta and meta.__rawset or defrawset)(table,key,value)
-end
-
-rawtype = type
-
-function type(item)
-	if rawtype(item) == "table" then
-		local meta = rawgetmetatable(item)
-	    return (meta and meta.__type or rawtype)(item)
+	_G[k] = function(i,...)
+		local mt = getmetatable(i)
+		if mt and mt["__"..k] then return mt["__"..k](i,...) end
+		return _G[p..k](i,...)
 	end
-	return rawtype(item)
 end
+
+addmetamethod("type")
+addmetamethod("tostring")
+addmetamethod("get")
+addmetamethod("set")
 
 --math
 
@@ -91,86 +58,56 @@ end
 
 table.reverse = function(t)
 	local n = {}
-	for k , v in pairs(t) do
-		n[k] = v
-	end
-	for i , v in ipairs(t) do
-		n[#t - (i - 1)] = v
-	end
+	for k , v in pairs(t) do n[k] = v end
+	for i , v in ipairs(t) do n[#t - (i - 1)] = v end
 	return n
 end
 
 table.count = function(t)
 	local c = 0
-	for k , v in pairs(t) do
-		c = c + 1
-	end
+	for k , v in pairs(t) do c = c + 1 end
 	return c
 end
 
-table.empty = function(t)
-	for k , v in pairs(t) do
-		return false
-	end
+table.isEmpty = function(t)
+	for k , v in pairs(t) do return false end
 	return true
 end
  
-table.copy = function(s,t)
-	local n , t = {} , t or {}
-	for k , v in pairs(s) do
+table.copy = function(t , i , l)
+	local n , i , l = {} , i or -1 , l or {}
+	for k , v in pairs(t) do
 		if type(v) == "table" then
-			if not t[v] then
-				t[v] = {}
-				t[v] = table.copy(v,t)
+			if not l[v] and i ~= 0 then
+				l[v] = {}
+				table.incert( l[v] , table.copy(v , i - 1 , l) )
 			end
-			n[k] = t[v]
+			n[k] = l[v]
 		else
 			n[k] = v
 		end
 	end
-	local m = getmetatable(s)
+	local m = getmetatable(t)
 	if m then
-		if not t[m] then
-			t[m] = {}
-			t[m] = table.copy(m,t)
+		if not l[m] then
+			l[m] = {}
+			table.incert( l[m] , table.copy(m , -1 , l) )
 		end
-		getmetatable(n , t[m])
+		setmetatable(n , l[m])
 	end
 	return n
 end
 
 table.incert = function(t,n)
 	for k , v in pairs(n) do
-		if type(v) == "table" then
-			if not t[k] then t[k] = {} end
-			table.set(t[k],v)
-		else
-			t[k] = v
-		end
+		t[k] = v
 	end
 end
-
---font
-
-font = setmetatable( {} , {
-	__index = function(self,key)
-		if type(key) == "number" then
-			self[key] = love.graphics.newFont(key)
-			return self[key]
-		end
-	end
-} )
 
 --love
 
-function love.fatalerror(e)
-	love.errhand(e)
-	love.event.quit()
-end
-
 function love.graphics.prints(t,x,y,w,h,xa,ya)
-	ya , t = ya or "center" , tostring(t)
-	if ya == "center" then
+	if not ya or ya == "center" then
 		local l = #( ( {love.graphics.getFont():getWrap(t,w)} )[2] )
 		y = y + h / 2 -  (l * love.graphics.getFont():getHeight())/2
 	elseif ya == "bottom" then

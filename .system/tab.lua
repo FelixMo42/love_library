@@ -33,7 +33,9 @@ end
 
 function tab:dofunc(f,...)
 	local ret = {}
-	for i , layer in ipairs(self.layer) do
+	revers = (f == "draw")
+	for i = revers and #self.layer or 1 , revers and 1 or #self.layer , revers and -1 or 1 do
+		local layer = self.layer[i]
 		if layer.dofunc then
 			ret[#ret + 1] = layer:dofunc(f,...)
 		else

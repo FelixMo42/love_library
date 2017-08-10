@@ -1,9 +1,10 @@
+--child
+
 local object = class:new({
-	type = "ui",
-	child = {active = true}
+	child = {}
 })
 
-function object:dofunc(f,...)
+function object:dofunc(f, ...)
 	local function call(item,f,...)
 		if item[f] ~= nil then
 			if type(item[f]) == "function" then
@@ -35,8 +36,18 @@ function object:dofunc(f,...)
 	end
 end
 
+function object:addCallback(list, name, func, i)
+	if not self[list] then self[list] = {} end
+	i = i or #self[list] + 1
+	self[list][name] = func
+	table.insert(self[list],i,name)
+end
+
+function object:removeCallback(list, id)
+	--to do
+end
+
 function object:addChild(c,i,n)
-	c = c or button:new()
 	if type(i) == "string" then
 		self.child[i] = c
 		i = n
@@ -47,31 +58,11 @@ function object:addChild(c,i,n)
 	return c
 end
 
-function object:addCallback(list,name,func,i)
-	if self[list] then
-		i = i or #self[list] + 1
-	else
-		i = 1
-		self[list] = {}
-	end
-	self[list][name] = func
-	table.insert(self[list],i,name)
-end
-
-function object:calc(val,...)
-	if type(val) == "function" then
-		return val(...)
-	end
-	return val
-end
-
 function object.child:is(var)
 	local is = false
 	for k , item in pairs(self) do
 		if rawtype(item) == "table" then
-			if item[var] then
-				is = item[var] or is
-			end
+			if item[var] then is = item[var] or is end
 			if #(item.child or {}) > 0 and item.child.is then
 				is = item[var] or item.child:is(var) or is
 			end
@@ -83,18 +74,14 @@ end
 function object.child:get(var)
 	local vars = {}
 	for k , item in pairs(self) do
-		if item[var] then
-			vars[#vars + 1] = item[var]
-		end
+		if item[var] then vars[#vars + 1] = item[var] end
 	end
 	return unpack(vars)
 end
 
 function object.child:clear(new)
 	for k , v in pairs(self) do
-		if rawtype(v) == "table" then
-			self[k] = nil
-		end
+		if rawtype(v) == "table" then self[k] = nil end
 	end
 end
 

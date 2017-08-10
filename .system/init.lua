@@ -6,8 +6,9 @@ socket = require "socket"
 
 console = require ".system/console"
 class = require ".system/class"
-object = require ".system/object"
 filesystem = require ".system/filesystem"
 tab = require ".system/tab"
+object = require ".system/object"
+button = require ".system/button"
 
 require ".system/setup"
