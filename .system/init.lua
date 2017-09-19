@@ -1,14 +1,14 @@
 require ".system/system"
-require ".system/main"
 
 http = require "socket.http"
 socket = require "socket"
 
-console = require ".system/console"
-class = require ".system/class"
-filesystem = require ".system/filesystem"
-tab = require ".system/tab"
-object = require ".system/object"
-button = require ".system/button"
+console = require ".system/lib/console"
+class = require ".system/lib/class"
+filesystem = require ".system/lib/filesystem"
+tab = require ".system/lib/tab"
+object = require ".system/lib/object"
+color = require ".system/lib/color"
+button = require ".system/lib/button"
 
 require ".system/setup"

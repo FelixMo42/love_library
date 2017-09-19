@@ -1,14 +1,14 @@
 return {
-	["main.lua"] = 6,
+	["main.lua"] = 7,
 	[".directory.lua"] = 6,
-	[".system/class.lua"] = 1,
-	[".system/console.lua"] = 1,
-	[".system/init.lua"] = 2,
-	[".system/object.lua"] = 1,
+	[".system/init.lua"] = 3,
 	[".system/require.lua"] = 1,
 	[".system/system.lua"] = 2,
 	[".system/setup.lua"] = 2,
-	[".system/filesystem.lua"] = 0,
-	[".system/tab.lua"] = 1,
-	[".system/button.lua"] = 0
+	[".system/lib/class.lua"] = 0,
+	[".system/lib/object.lua"] = 0,
+	[".system/lib/filesystem.lua"] = 0,
+	[".system/lib/tab.lua"] = 0,
+	[".system/lib/console.lua"] = 0,
+	[".system/lib/button.lua"] = 0
 }

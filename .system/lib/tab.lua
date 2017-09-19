@@ -9,18 +9,16 @@ local function add(self,item,i,name)
 	elseif name then
 		self[name] = item
 	end
-	i = i or #self + 1
+	if i == -1 then
+		i = #self + 2 - i
+	else
+		i = i or #self + 1
+	end
 	table.insert(self,i,item)
 end
 
-function tab:addLayer(name , i)
-	self.layer[name] = {add = add}
-	_G[self.name][name] = self.layer[name]
-	i = i or #self.layer  + 1
-	table.insert(self.layer,i,self.layer[name])
-end
-
-function tab:load()
+function tab:initialize()
+	self:addLayer("ui")
 	self:addLayer("main")
 	self.layer.main.tab = _G[self.name]
 	function self.layer.main:dofunc(f,...)
@@ -28,7 +26,13 @@ function tab:load()
 			return self.tab[f](...)
 		end
 	end
-	self:addLayer("ui")
+end
+
+function tab:addLayer(name , i)
+	self.layer[name] = {add = add}
+	_G[self.name][name] = self.layer[name]
+	i = i or #self.layer  + 1
+	table.insert(self.layer,i,self.layer[name])
 end
 
 function tab:dofunc(f,...)

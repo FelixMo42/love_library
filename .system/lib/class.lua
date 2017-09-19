@@ -54,7 +54,7 @@ setgetter( class , "new" , function(self)
 	return function(self,...)
 		local new = getmetatable(self).__copy(self)
 		getmetatable(new).__new(new,...)
-		if new.load then new:load() end
+		if new.initialize then new:initialize(self) end
 		return new
 	end
 end )

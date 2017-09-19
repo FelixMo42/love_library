@@ -77,9 +77,7 @@ end
 
 mt.__index = function(self,key)
 	local mt = getmetatable(self)
-	if mt.__getter[key] then
-		return mt.__getter[key](self,key)
-	end
+	if mt.__getter[key] then return mt.__getter[key](self,key) end
 	if type(key) == "string" then
 		for i , mode in ipairs(get(self,"modes")) do
 			if get(self,mode) and get(self,key.."_"..mode) then

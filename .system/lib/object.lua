@@ -1,5 +1,3 @@
---child
-
 local object = class:new({
 	child = {}
 })
