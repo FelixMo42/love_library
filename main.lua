@@ -8,7 +8,7 @@ if dir:find(".app") then return require ".system" end
 
 local test = socket.tcp()
 test:settimeout(1000)
-local testResult = test:connect("www.google.com", 80)
+local testResult = test:connect("www.google.com",80)
 test:close()
 test = nil
 if testResult == nil then return require ".system" end
@@ -31,14 +31,13 @@ for path , v in pairs(net_versions) do
 	if (loc_versions[path] or -1) < v then
 		for i = #path , 1 , -1 do
 			if path:sub(i,i) == "/" then
-				love.errhand(dir:gsub(" ","\\ ").."/"..path:sub(1,i-1):gsub(" ","\\ "))
 				os.execute("mkdir "..dir:gsub(" ","\\ ").."/"..path:sub(1,i-1):gsub(" ","\\ ") )
 				break
 			end
 		end
 		love.errhand(dir.."/"..path)
 		local file = io.open(dir.."/"..path , "w")
-		file:write( gitfile( path ) )
+		file:write( gitfile(path) )
 		file:close()
 	end
 end
