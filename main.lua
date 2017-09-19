@@ -15,11 +15,11 @@ if testResult == nil then return require ".system" end
 
 local function gitfile(file)
 	local data = "https://raw.githubusercontent.com/FelixMo42/love_library/master/"..file
-	local ret = {}
+	local ret
 	repeat
-		ret.d = http.request("http://www.mosegames.com/https.php",data)
-	until ret.d
-	return ret.d
+		ret = http.request("http://www.mosegames.com/https.php",data)
+	until ret
+	return ret
 end
 
 local f = loadfile(dir.."/.directory.lua")
@@ -29,13 +29,14 @@ if net_versions[".directory.lua"] == loc_versions[".directory.lua"] then return 
 
 for path , v in pairs(net_versions) do
 	if (loc_versions[path] or -1) < v then
-		local s = 1
-		for i = 1 , #path do
+		for i = #path , 1 , -1 do
 			if path:sub(i,i) == "/" then
-				os.execute("mkdir "..dir:gsub(" ","\\ ").."/"..path:sub(s,i-1):gsub(" ","\\ ") )
-				s = i + 1
+				love.errhand(dir:gsub(" ","\\ ").."/"..path:sub(1,i-1):gsub(" ","\\ "))
+				os.execute("mkdir "..dir:gsub(" ","\\ ").."/"..path:sub(1,i-1):gsub(" ","\\ ") )
+				break
 			end
 		end
+		love.errhand(dir.."/"..path)
 		local file = io.open(dir.."/"..path , "w")
 		file:write( gitfile( path ) )
 		file:close()
