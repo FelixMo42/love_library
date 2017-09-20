@@ -4,7 +4,7 @@ return {
 	[".system/require.lua"] = 1,
 	[".system/system.lua"] = 2,
 	[".system/setup.lua"] = 2,
-	[".system/lib/color.lua"] 
+	[".system/lib/color.lua"] = 0,
 	[".system/lib/class.lua"] = 0,
 	[".system/lib/object.lua"] = 0,
 	[".system/lib/filesystem.lua"] = 0,
