@@ -13,15 +13,15 @@ test:close()
 test = nil
 if testResult == nil then return require ".system" end
 --local functons
-local function gitfile(file)
-	return http.request("http://www.mosegames.com/https.php","https://raw.githubusercontent.com/FelixMo42/love_library/master/"..file)
+local function gitfile(path)
+	return http.request("http://www.mosegames.com/https.php","https://raw.githubusercontent.com/FelixMo42/love_library/master/"..path)
 end
 local function write(path,content)
 	local file = io.open(dir.."/"..path , "w")
 	file:write(content)
 	file:close()
 end
-local function read(file)
+local function read(path)
 	local file = io.open(dir.."/"..path , "w")
 	local c = file:read("*l")
 	file:close()
