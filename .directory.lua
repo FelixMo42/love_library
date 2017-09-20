@@ -1,10 +1,10 @@
 return {
-	["main.lua"] = 9,
-	[".directory.lua"] = 6,
+	["main.lua"] = 10,
 	[".system/init.lua"] = 3,
 	[".system/require.lua"] = 1,
 	[".system/system.lua"] = 2,
 	[".system/setup.lua"] = 2,
+	[".system/lib/color.lua"] 
 	[".system/lib/class.lua"] = 0,
 	[".system/lib/object.lua"] = 0,
 	[".system/lib/filesystem.lua"] = 0,

@@ -3,6 +3,7 @@ require ".system/system"
 http = require "socket.http"
 socket = require "socket"
 
+color = require ".system/lib/color"
 console = require ".system/lib/console"
 class = require ".system/lib/class"
 filesystem = require ".system/lib/filesystem"
