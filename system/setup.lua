@@ -109,7 +109,7 @@ screen = {
 	end
 }
 
-systems = {mouse = mouse,screen = screen}
+system.systems = {mouse = mouse , screen = screen}
 
 --load files
 

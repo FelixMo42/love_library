@@ -1,17 +1,17 @@
 local http = require("socket.http")
 local socket = require("socket")
 local dir = love.filesystem.getSource()
---set up packets
+--set up
 http.TIMOUT = 10
-package.path = package.path..";"..dir.."/.system/require.lua"
-if dir:find(".app") then return require ".system" end
+local settings = {}
+if love.conf then love.conf(settings); settings.libraries = settings.libraries or {} end
+if not settings.update or dir:find(".app") then return require("system",settings.libraries) end
 --see if ther is internet accesse
 local test = socket.tcp()
 test:settimeout(1000)
-local testResult = test:connect("www.google.com",80)
+settings.connection = test:connect("www.google.com",80)
 test:close()
-test = nil
-if testResult == nil then return require ".system" end
+if settings.connection == nil then return require("system",settings.libraries) end
 --local functons
 local function gitfile(path)
 	return http.request("http://www.mosegames.com/https.php","https://raw.githubusercontent.com/FelixMo42/love_library/master/"..path)
@@ -28,12 +28,12 @@ local function read(path)
 	return c
 end
 --get net directory
-local net_directory = gitfile(".directory.lua")
-local loc_directory = read(".directory.lua") or "{}"
-if net_versions[".directory.lua"] == loc_versions[".directory.lua"] then return require ".system" end
-write(".directory.lua" , net_directory)
-local net_directory = loadfile( net_directory )()
-local loc_directory = loadfile( loc_directory )()
+local net_directory = gitfile("system/directory.lua")
+local loc_directory = read("system/directory.lua") or "return {}"
+if net_versions == loc_versions then return require("system",settings.libraries) end
+write("system/directory.lua" , net_directory)
+net_directory = loadfile( net_directory )()
+loc_directory = loadfile( loc_directory )()
 --update files
 for path , v in pairs(net_versions) do
 	if (loc_versions[path] or -1) < v then
@@ -53,4 +53,4 @@ for path , v in pairs(loc_versions) do
 	end
 end
 --return
-return require ".system"
+return require("system",settings.libraries)

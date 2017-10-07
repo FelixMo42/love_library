@@ -15,7 +15,7 @@ end
 function filesystem:getDirectory(file,ext,hidden)
 	if type(ext) == "boolean" then hidden , ext = ext , hidden end
 	local path , i , t = (self.dir.."/"..file):gsub(" ","\\ ") , 1 , {}
-    local pfile = io.popen('ls -a '..path)
+    local pfile = io.popen("ls -a "..path)
     for filename in pfile:lines() do
         if filename:sub(1,1) ~= "." or hidden then
             if not ext or filename:find(ext) then
